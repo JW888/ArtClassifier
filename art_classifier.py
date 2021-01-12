@@ -8,6 +8,8 @@ from PIL import Image
 import bs4 as bs
 import urllib.request
 
+st.set_page_config(layout="wide")
+
 
 add_selectbox = st.sidebar.selectbox(
     "How would you like to be contacted?",
@@ -75,7 +77,7 @@ with st.beta_expander("4. Genre of Painters"):
     df_genre = pd.DataFrame(df['genre'].str.get_dummies(',').sum())
     df_genre.reset_index(level=0, inplace=True)
     df_genre = df_genre.rename({'index': 'genre', 0: 'count'}, axis=1)
-    df_genre
+    
 
     genre_chart = alt.Chart(df_genre).mark_bar().encode(
         x='genre',
@@ -83,7 +85,12 @@ with st.beta_expander("4. Genre of Painters"):
         tooltip=['genre','count'],
     ).properties(height=500, width=700)
 
-    st.altair_chart(genre_chart)
+    col_genre_chart, col_genre = st.beta_columns([2,1])
+    
+    with col_genre_chart:
+        st.altair_chart(genre_chart)
+    with col_genre:
+        df_genre
 
 st.markdown("</br>", unsafe_allow_html=True)
 
@@ -114,22 +121,6 @@ with st.beta_expander("5. Nationality of Painters"):
     df_position = pd.merge(df_latlong, df_nat_adj, how='inner')
     df_position = pd.merge(df_position, df_nationality, how='inner')
     df_position
-
-
-
-    # df_position1 = pd.DataFrame(
-    # np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-    # columns=['lat', 'lon'])
-
-    # df_position1
-
-    # DATA_URL = "https://raw.githubusercontent.com/ajduberstein/geo_datasets/master/housing.csv"
-    # df = pd.read_csv(DATA_URL)
-
-
-    # view = pdk.data_utils.compute_view(df[["lng", "lat"]])
-    # view.pitch = 75
-    # view.bearing = 60
 
     st.pydeck_chart(pdk.Deck(
         map_style='mapbox://styles/mapbox/dark-v9',
@@ -164,6 +155,7 @@ with st.beta_expander("5. Nationality of Painters"):
             "style": {"background": "steelblue", "color": "white", "size": 5,  "font-family": '"Helvetica Neue", Arial', "z-index": "10000"},
         },
     ))
+    
 
 st.markdown("</br>", unsafe_allow_html=True)
 
@@ -188,51 +180,5 @@ with st.beta_expander("6. Timeline of Painters"):
     )
 
 
+
     st.altair_chart(timeline_artists)
-
-
-    # nationality_chart = alt.Chart(df_nationality).mark_bar().encode(
-    #     x='nationality',
-    #     y='count',
-    #     tooltip=['nationality','count'],
-    # ).properties(height=500, width=700)
-
-    # st.altair_chart(nationality_chart)
-
-
-# option = st.sidebar.selectbox(
-#     'Which number do you like best?',
-#     df['first column'])
-
-# 'You selected:', option
-
-# st.write(pd.DataFrame({
-#     'first column': [1, 2, 3, 4],
-#     'second column': [10, 20, 30, 40]
-# }))
-
-# df = pd.DataFrame({
-#     'first column': [1, 2, 3, 4],
-#     'second column': [10, 20, 30, 40]
-# })
-
-# df
-# chart_data = pd.DataFrame(
-#     np.random.randn(20, 3),
-#     columns=['a', 'b', 'c'])
-
-# st.line_chart(chart_data)
-
-
-# map_data = pd.DataFrame(
-#     np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-#     columns=['lat', 'lon'])
-
-# st.map(map_data)
-
-# if st.checkbox('Show dataframe'):
-#     chart_data = pd.DataFrame(
-#         np.random.randn(20, 3),
-#         columns=['a', 'b', 'c'])
-
-#     st.line_chart(chart_data)
