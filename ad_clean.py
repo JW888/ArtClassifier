@@ -28,3 +28,5 @@ for ad_image in image_list:
 
     path_mod = re.sub(ad_pattern, "Albrecht_Durer_", ad_image)
     os.rename(ad_image, path_mod)
+
+
